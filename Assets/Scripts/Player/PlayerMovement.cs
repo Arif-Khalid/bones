@@ -50,8 +50,9 @@ public class PlayerMovement : MonoBehaviour
         _moveVal3D = Vector3.Lerp(_moveVal3D, new Vector3(desiredMove.x, _playerYVelocity, desiredMove.z), _acceleration);
     }
 
-    private void FixedUpdate() {
+    // Carry out movement in update since character controller is not physics based
+    private void Update() {
         ProcessInputs();
-        _characterController.Move(_moveVal3D * _speed * Time.fixedDeltaTime);
+        _characterController.Move(_moveVal3D * _speed * Time.deltaTime);
     }
 }
