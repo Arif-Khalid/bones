@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-public abstract class StackableItem : MonoBehaviour
+[RequireComponent(typeof(Collider), typeof(Renderer))]
+public abstract class StackableItem : MonoBehaviour, IRunServiceable
 {
+    [SerializeField] private float _fadeSpeed = 1.0f;
     private bool _hasCollided = false;
     // This is necessary because getting bounds during motion is inaccurate
     [HideInInspector] public float Height = 0;
@@ -14,6 +15,7 @@ public abstract class StackableItem : MonoBehaviour
 
     
     private void OnCollisionEnter(Collision collision) {
+
         if (_hasCollided) {
             return;
         }
@@ -22,7 +24,21 @@ public abstract class StackableItem : MonoBehaviour
             GameManager.OnAddToStack(this);
         }
         else {
-            Fader.instance.AddObject(this.gameObject);
+            RunService.instance.AddRunServiceable(this);
+        }
+    }
+
+    public bool Run() {
+        Renderer renderer = GetComponent<Renderer>();
+        float currentOpacity = renderer.material.GetFloat("_Opacity");
+        float newOpacity = currentOpacity - _fadeSpeed * Time.deltaTime;
+        if (newOpacity > 0) {
+            renderer.material.SetFloat("_Opacity", newOpacity);
+            return false;
+        }
+        else {
+            Destroy(gameObject);
+            return true;
         }
     }
 }
