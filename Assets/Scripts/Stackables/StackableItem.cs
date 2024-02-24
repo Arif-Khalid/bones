@@ -22,7 +22,7 @@ public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodabl
         }
         _hasCollided = true;
         if (collision.gameObject.tag == "StackTop") {
-            GameManager.OnAddToStack(this);
+            GameManager.TriggerOnAddToStack(this);
         }
         else {
             RunService.instance.AddRunServiceable(this);

@@ -51,7 +51,7 @@ public class Tray : MonoBehaviour
             _stackedItems[i].gameObject.AddComponent<Rigidbody>();
         }
         _currentStackTop.tag = "Untagged";
-        GameManager.OnEndGame();
+        GameManager.TriggerOnEndGame();
     }
 
     private void MoveStack() {

@@ -15,6 +15,10 @@ public class RunService : MonoBehaviour
         }
     }
 
+    private void Start() {
+        GameManager.OnStartGame += Reset;
+    }
+
     private void Update() {
         int size = _runServiceQueue.Count;
         while(size > 0) {
@@ -24,6 +28,10 @@ public class RunService : MonoBehaviour
             }
             size -= 1;
         }
+    }
+
+    private void Reset() {
+        _runServiceQueue.Clear();
     }
 
     public void AddRunServiceable(IRunServiceable runServiceable) {

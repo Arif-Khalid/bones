@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using static ObjectPooler;
+
 public enum PoolId
 {
     Pizza,
@@ -33,8 +35,8 @@ public class ObjectPooler : MonoBehaviour
                 Debug.LogWarning("There are multiple existence of the pool id " + pool.Id + " in pool scriptable object");
                 continue;
             }
-            _pools[pool.Id] = new Queue<GameObject>();
-            _removedObjectsPools[pool.Id] = new HashSet<GameObject>();
+            _pools.Add(pool.Id, new Queue<GameObject>());
+            _removedObjectsPools.Add(pool.Id, new HashSet<GameObject>());
             for (int i = 0; i < pool.size; i++) {
                 GameObject spawnedObject = Instantiate(pool.Prefab, Vector3.zero, Quaternion.identity);
                 spawnedObject.SetActive(false);
@@ -86,5 +88,8 @@ public class ObjectPooler : MonoBehaviour
             }
         }
         _removedObjectsPools.Clear();
+        foreach(PoolId poolId in _pools.Keys) {
+            _removedObjectsPools.Add(poolId, new HashSet<GameObject>());
+        }
     }
 }
