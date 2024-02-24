@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour, IRunServiceable
 {
     [SerializeField] private GameObject _explosionPrefab = null;
+    [SerializeField] private LayerMask _explodingObjects;
+    [SerializeField] private float _explosionRadius = 5.0f;
+    [SerializeField] private float _explosionForce = 10.0f;
     [SerializeField] private float _timeBeforeExplode = 10.0f;
     [SerializeField] private float _timeForColorChange = 2.0f;
     [SerializeField] private float _percentageSpeedUp = 0.9f;
@@ -41,5 +42,20 @@ public class Bomb : MonoBehaviour, IRunServiceable
     private void Explode() {
         Destroy(gameObject);
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius, _explodingObjects);
+        for(int i = 0; i < colliders.Length; i++) {
+            IExplodable explodable = colliders[i].GetComponent<IExplodable>();
+            if (explodable != null) {
+                Vector3 direction = Vector3.Normalize(colliders[i].transform.position - transform.position);
+                float forceMagnitude = Vector3.Distance(transform.position, colliders[i].transform.position) / _explosionRadius * _explosionForce;
+                Vector3 currentExplosionForce = direction * forceMagnitude;
+                explodable.OnExplode(currentExplosionForce);
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _explosionRadius);
     }
 }

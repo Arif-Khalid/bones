@@ -15,18 +15,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Fire",
+                    "name": "Kick",
                     "type": "Button",
-                    "id": "7ca04998-57ed-45f5-a271-b254e4c3107b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "02e93006-1975-4fdf-ba5c-9f7ca381e4c8",
+                    "id": "e1ca763d-1d0b-4d67-a10d-08f7c84d3699",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -91,23 +82,12 @@
                 },
                 {
                     "name": "",
-                    "id": "71477908-1cc8-49e3-b51e-91c1c1cba8a7",
-                    "path": "<Mouse>/{PrimaryAction}",
+                    "id": "582e74e5-d2b7-4636-8ce1-541a640bc7d4",
+                    "path": "*/{PrimaryAction}",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3fa77263-b366-4f56-a12a-a96f105fe1ed",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "Jump",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

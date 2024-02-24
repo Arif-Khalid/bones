@@ -10,15 +10,21 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject _pizzaPrefab = null;
     [SerializeField] private float _secondsBetweenSpawns = 5.0f;
+    [SerializeField] private bool _isSpawning = true;
 
     private Boundary _spawnBoundary = null;
     private void Start() {
         _spawnBoundary = GetComponentInChildren<Boundary>();
         StartCoroutine(nameof(SpawnItems));
+        OnEndGame += StopSpawning;
+    }
+
+    private void StopSpawning() {
+        _isSpawning = false;
     }
 
     IEnumerator SpawnItems() {
-        while (true) {
+        while (_isSpawning) {
             GameObject pizza = Instantiate(_pizzaPrefab);
             pizza.transform.position = _spawnBoundary.RandomPosInBound;
             yield return new WaitForSeconds(_secondsBetweenSpawns);

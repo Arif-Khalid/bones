@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
 
     // Input reading
     private Vector2 _moveVal2D = Vector2.zero;
+    private float _playerYVelocity = 0f;
 
     // Input processing
     private Vector3 _moveVal3D = Vector3.zero;
@@ -26,7 +27,14 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     private void ProcessInputs() {
+        if(!_characterController.isGrounded) {
+            _playerYVelocity += Physics.gravity.y * Time.deltaTime;
+        }
+        else {
+            _playerYVelocity = 0f;
+        }
         _moveVal3D = transform.right * _moveVal2D.x + transform.forward * _moveVal2D.y;
+        _moveVal3D = new Vector3(_moveVal3D.x, _playerYVelocity, _moveVal3D.z);
     }
 
     // Carry out movement in update since character controller is not physics based

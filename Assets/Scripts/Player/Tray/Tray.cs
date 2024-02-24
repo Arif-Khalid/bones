@@ -6,14 +6,13 @@ public class Tray : MonoBehaviour
     [SerializeField] private float _stackRigidity = 1.0f;
     private StackableItem _currentStackTop = null;
     private List<StackableItem> _stackedItems = new List<StackableItem>();
+    private bool _isStacked = true;
     private void Start() {
-        gameObject.layer = LayerMask.NameToLayer("IgnorePlayerCollision");
         gameObject.tag = "StackTop";
         GameManager.OnAddToStack += AddToStack;
     }
 
     private void AddToStack(StackableItem stackableItem) {
-        // If it was a falling item. Currently only time it is not is when it is the base tray.
         float currentHeight;
         Vector3 currentPos;
         if(_currentStackTop == null) {
@@ -38,10 +37,21 @@ public class Tray : MonoBehaviour
 
         _currentStackTop = stackableItem;
         _stackedItems.Add(stackableItem);
-        stackableItem.gameObject.layer = LayerMask.NameToLayer("IgnorePlayerCollision");
+        stackableItem.tray = this;
         stackableItem.gameObject.tag = "StackTop";
     }
 
+    public void RagdollStack() {
+        if(!_isStacked) {
+            return;
+        }
+        _isStacked = false;
+        for (int i = 0; i < _stackedItems.Count; i++) {
+            _stackedItems[i].gameObject.AddComponent<Rigidbody>();
+        }
+        _currentStackTop.tag = "Untagged";
+        GameManager.OnEndGame();
+    }
 
     private void MoveStack() {
         for (int i = 0; i < _stackedItems.Count; i++) {
@@ -64,6 +74,8 @@ public class Tray : MonoBehaviour
     }
 
     private void LateUpdate() {
-        MoveStack();
+        if(_isStacked) {
+            MoveStack();
+        }
     }
 }

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(Renderer))]
-public abstract class StackableItem : MonoBehaviour, IRunServiceable
+public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodable
 {
     [SerializeField] private float _fadeSpeed = 1.0f;
+    [HideInInspector] public Tray tray = null;
     private bool _hasCollided = false;
     // This is necessary because getting bounds during motion is inaccurate
     [HideInInspector] public float Height = 0;
@@ -40,5 +41,12 @@ public abstract class StackableItem : MonoBehaviour, IRunServiceable
             Destroy(gameObject);
             return true;
         }
+    }
+
+    public void OnExplode(Vector3 explosionForce) {
+        if(tray != null) {
+            tray.RagdollStack(); // Adds rigidbody to entire stack
+        }
+        GetComponent<Rigidbody>().AddForce(explosionForce, ForceMode.Impulse);
     }
 }
