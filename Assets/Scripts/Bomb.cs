@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class Bomb : MonoBehaviour, IRunServiceable
+public class Bomb : MonoBehaviour, IRunServiceable, IPooledObject
 {
-    [SerializeField] private GameObject _explosionPrefab = null;
     [SerializeField] private LayerMask _explodingObjects;
     [SerializeField] private float _explosionRadius = 5.0f;
     [SerializeField] private float _explosionForce = 10.0f;
@@ -12,12 +11,13 @@ public class Bomb : MonoBehaviour, IRunServiceable
     [SerializeField] private Color _redColor = Color.red;
     [SerializeField] private Color _blackColor = Color.black;
     private bool _turningRed = true;
+    private float _currentTimeForColorChange = 2.0f;
     private float _currentExplodeTime = 0;
     private float _currentColorChangeTime = 0;
 
-
-    private void Start() {
-        RunService.instance.AddRunServiceable(this);
+    private Renderer _renderer;
+    private void Awake() {
+        _renderer = GetComponent<Renderer>();
     }
 
     public bool Run() {
@@ -27,21 +27,19 @@ public class Bomb : MonoBehaviour, IRunServiceable
             Explode();
             return true;
         }
-        if(_currentColorChangeTime > _timeForColorChange) {
-            _timeForColorChange = _percentageSpeedUp * _timeForColorChange;
+        if(_currentColorChangeTime > _currentTimeForColorChange) {
+            _currentTimeForColorChange = _percentageSpeedUp * _currentTimeForColorChange;
             _turningRed = !_turningRed;
             _currentColorChangeTime = 0;
         }
-        Renderer renderer = GetComponent<Renderer>();
         Color baseColor = _turningRed ? _blackColor : _redColor;
         Color destColor = _turningRed ? _redColor : _blackColor;
-        renderer.material.color = Color.Lerp(baseColor, destColor, _currentColorChangeTime / _timeForColorChange);
+        _renderer.material.color = Color.Lerp(baseColor, destColor, _currentColorChangeTime / _currentTimeForColorChange);
         return false;
     }
 
     private void Explode() {
-        Destroy(gameObject);
-        Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        ObjectPooler.instance.SpawnFromPool(PoolId.Explosion, transform.position, Quaternion.identity);
         Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius, _explodingObjects);
         for(int i = 0; i < colliders.Length; i++) {
             IExplodable explodable = colliders[i].GetComponent<IExplodable>();
@@ -52,6 +50,15 @@ public class Bomb : MonoBehaviour, IRunServiceable
                 explodable.OnExplode(currentExplosionForce);
             }
         }
+        gameObject.SetActive(false);
+    }
+
+    public void OnObjectSpawn() {
+        _currentTimeForColorChange = _timeForColorChange;
+        _currentExplodeTime = 0;
+        _currentColorChangeTime = 0;
+        _turningRed = true;
+        RunService.instance.AddRunServiceable(this);
     }
 
     private void OnDrawGizmosSelected() {

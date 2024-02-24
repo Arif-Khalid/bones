@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SpawnItems() {
         while (_isSpawning) {
-            ObjectPooler.instance.SpawnFromPool(PoolId.Pizza, _spawnBoundary.RandomPosInBound, Quaternion.identity);
+            ObjectPooler.instance.SpawnFromPool(PoolId.Bomb, _spawnBoundary.RandomPosInBound, Quaternion.identity);
             yield return new WaitForSeconds(_secondsBetweenSpawns);
         }
     }
