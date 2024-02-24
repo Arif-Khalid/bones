@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
     public static UnityAction OnStartGame;
     public static UnityAction OnEndGame;
 
-    [SerializeField] private GameObject _pizzaPrefab = null;
     [SerializeField] private float _secondsBetweenSpawns = 5.0f;
     [SerializeField] private bool _isSpawning = true;
 
@@ -25,8 +24,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SpawnItems() {
         while (_isSpawning) {
-            GameObject pizza = Instantiate(_pizzaPrefab);
-            pizza.transform.position = _spawnBoundary.RandomPosInBound;
+            ObjectPooler.instance.SpawnFromPool(PoolId.Pizza, _spawnBoundary.RandomPosInBound, Quaternion.identity);
             yield return new WaitForSeconds(_secondsBetweenSpawns);
         }
     }

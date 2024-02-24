@@ -1,27 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(Renderer))]
-public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodable
+public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodable, IPooledObject
 {
     [SerializeField] private float _fadeSpeed = 1.0f;
+    public PoolId PrefabPoolId;
     [HideInInspector] public Tray tray = null;
     private bool _hasCollided = false;
     // This is necessary because getting bounds during motion is inaccurate
     [HideInInspector] public float Height = 0;
-    void Start() {
+    protected Renderer _renderer = null;
+    void Awake() {
         Height = GetComponent<Collider>().bounds.size.y;
+        _renderer = GetComponent<Renderer>();
     }
 
-    
-    private void OnCollisionEnter(Collision collision) {
 
+    private void OnCollisionEnter(Collision collision) {
         if (_hasCollided) {
             return;
         }
         _hasCollided = true;
-        if(collision.gameObject.tag == "StackTop") {
+        if (collision.gameObject.tag == "StackTop") {
             GameManager.OnAddToStack(this);
         }
         else {
@@ -29,24 +29,28 @@ public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodabl
         }
     }
 
-    public bool Run() {
-        Renderer renderer = GetComponent<Renderer>();
-        float currentOpacity = renderer.material.GetFloat("_Opacity");
+    public virtual bool Run() {
+        float currentOpacity = _renderer.material.GetFloat("_Opacity");
         float newOpacity = currentOpacity - _fadeSpeed * Time.deltaTime;
         if (newOpacity > 0) {
-            renderer.material.SetFloat("_Opacity", newOpacity);
+            _renderer.material.SetFloat("_Opacity", newOpacity);
             return false;
         }
         else {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             return true;
         }
     }
 
-    public void OnExplode(Vector3 explosionForce) {
-        if(tray != null) {
+    public virtual void OnExplode(Vector3 explosionForce) {
+        if (tray != null) {
             tray.RagdollStack(); // Adds rigidbody to entire stack
         }
         GetComponent<Rigidbody>().AddForce(explosionForce, ForceMode.Impulse);
+    }
+
+    public virtual void OnObjectSpawn() {
+        _renderer.material.SetFloat("_Opacity", 1);
+        _hasCollided = false;
     }
 }

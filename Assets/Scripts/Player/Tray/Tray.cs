@@ -39,6 +39,7 @@ public class Tray : MonoBehaviour
         _stackedItems.Add(stackableItem);
         stackableItem.tray = this;
         stackableItem.gameObject.tag = "StackTop";
+        ObjectPooler.instance.RemoveFromPool(stackableItem.PrefabPoolId, stackableItem.gameObject);
     }
 
     public void RagdollStack() {
