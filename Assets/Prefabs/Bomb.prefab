@@ -119,8 +119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 362f64536621de64bbd9a37f13bd5e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _explosionPrefab: {fileID: 575126032660801231, guid: 069f87ea1e5479e4b87b2ca646045e2b,
-    type: 3}
   _explodingObjects:
     serializedVersion: 2
     m_Bits: 128
@@ -128,7 +126,7 @@ MonoBehaviour:
   _explosionForce: 10
   _timeBeforeExplode: 10
   _timeForColorChange: 2
-  _percentageSpeedUp: 0.83
+  _percentageSpeedUp: 0.8
   _redColor: {r: 0.6603774, g: 0.015574936, b: 0.015574936, a: 1}
   _blackColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!54 &6591363235903905158

@@ -10,9 +10,11 @@ public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodabl
     // This is necessary because getting bounds during motion is inaccurate
     [HideInInspector] public float Height = 0;
     protected Renderer _renderer = null;
+    private Rigidbody _rigidbody = null;
     void Awake() {
         Height = GetComponent<Collider>().bounds.size.y;
         _renderer = GetComponent<Renderer>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
 
@@ -46,10 +48,12 @@ public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodabl
         if (tray != null) {
             tray.RagdollStack(); // Adds rigidbody to entire stack
         }
-        GetComponent<Rigidbody>().AddForce(explosionForce, ForceMode.Impulse);
+        _rigidbody.AddForce(explosionForce, ForceMode.Impulse);
     }
 
     public virtual void OnObjectSpawn() {
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
         _renderer.material.SetFloat("_Opacity", 1);
         _hasCollided = false;
     }

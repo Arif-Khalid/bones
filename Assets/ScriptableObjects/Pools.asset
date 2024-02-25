@@ -16,11 +16,11 @@ MonoBehaviour:
   - Id: 0
     Prefab: {fileID: 2238862612723782107, guid: a9863ef81b1b71f4da06dff9e6ae77fd,
       type: 3}
-    size: 10
+    size: 50
   - Id: 1
     Prefab: {fileID: 1936367430979011104, guid: 49b8355ed6af15b4e83e252d4300989c,
       type: 3}
-    size: 20
+    size: 50
   - Id: 2
     Prefab: {fileID: 575126032660801231, guid: 069f87ea1e5479e4b87b2ca646045e2b, type: 3}
-    size: 20
+    size: 50

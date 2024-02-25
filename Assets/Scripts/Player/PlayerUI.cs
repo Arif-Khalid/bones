@@ -5,12 +5,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerUI : MonoBehaviour
 {
-    [SerializeField] private Canvas _generalUICanvas = null;
-    [SerializeField] private Canvas _escapeMenuCanvas = null;
-    [SerializeField] private Canvas _deathCanvas = null;
+    [SerializeField] private GameObject _generalUICanvas = null;
+    [SerializeField] private GameObject _escapeMenuCanvas = null;
+    [SerializeField] private GameObject _deathCanvas = null;
 
     private PlayerInput _playerInput = null;
     private void Start() {
+        _generalUICanvas.SetActive(true);
+        _escapeMenuCanvas.SetActive(false);
+        _deathCanvas.SetActive(false);
         GameManager.OnEndGame += OnDeath;
     }
 
@@ -23,7 +26,7 @@ public class PlayerUI : MonoBehaviour
         Time.timeScale = 0.0f;
         Cursor.lockState = CursorLockMode.None;
         _playerInput.SwitchCurrentActionMap("PauseUI");
-        _escapeMenuCanvas.enabled = true;
+        _escapeMenuCanvas.SetActive(true);
     }
 
     public void OnResume() {
@@ -39,16 +42,16 @@ public class PlayerUI : MonoBehaviour
 
     private void DefaultGameplayUI() {
         _playerInput.SwitchCurrentActionMap("Gameplay");
-        _generalUICanvas.enabled = false;
-        _escapeMenuCanvas.enabled = false;
-        _deathCanvas.enabled = false;
+        _generalUICanvas.SetActive(false);
+        _escapeMenuCanvas.SetActive(false);
+        _deathCanvas.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void OnDeath() {
         _playerInput.SwitchCurrentActionMap("DeathUI");
         Cursor.lockState = CursorLockMode.None;
-        _deathCanvas.enabled = true;
+        _deathCanvas.SetActive(true);
     }
 
     public void OnQuit() {

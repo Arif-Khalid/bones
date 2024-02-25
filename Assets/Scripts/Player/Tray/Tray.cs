@@ -8,8 +8,14 @@ public class Tray : MonoBehaviour
     private List<StackableItem> _stackedItems = new List<StackableItem>();
     private bool _isStacked = true;
     private void Start() {
-        gameObject.tag = "StackTop";
         GameManager.OnAddToStack += AddToStack;
+        GameManager.OnStartGame += ResetStack;
+    }
+
+    private void ResetStack() {
+        _stackedItems.Clear();
+        gameObject.tag = "StackTop";
+        _isStacked = true;
     }
 
     private void AddToStack(StackableItem stackableItem) {
@@ -51,6 +57,7 @@ public class Tray : MonoBehaviour
             _stackedItems[i].gameObject.AddComponent<Rigidbody>();
         }
         _currentStackTop.tag = "Untagged";
+        _currentStackTop = null;
         GameManager.TriggerOnEndGame();
     }
 
