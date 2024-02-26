@@ -58,13 +58,14 @@ public class ObjectPooler : MonoBehaviour
             Debug.LogWarning("Pool with the id " + poolId + " has run out of items");
             return null;
         }
+        spawnedObject.SetActive(true);
         IPooledObject pooledObject = spawnedObject.GetComponent<IPooledObject>();
         if (pooledObject != null) {
             pooledObject.OnObjectSpawn();
         }
         spawnedObject.transform.position = position;
         spawnedObject.transform.rotation = rotation;
-        spawnedObject.SetActive(true);
+        
         _pools[poolId].Enqueue(spawnedObject);
         return spawnedObject;
     }

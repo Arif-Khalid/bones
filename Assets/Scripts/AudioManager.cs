@@ -37,7 +37,7 @@ public class AudioManager : MonoBehaviour
             source.pitch = audioGroup.pitch;
             source.loop = audioGroup.loop;
             source.clip = audioGroup.clip;
-            source.reverbZoneMix = 0;
+            source.spatialBlend = 0;
             if (_audioDictionary.ContainsKey(audioGroup.id)) {
                 Debug.LogWarning("Multiple instances of id " + audioGroup.id + " in audio scriptable object.");
             }

@@ -34,12 +34,14 @@ public class PlayerUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         _playerInput.SwitchCurrentActionMap("PauseUI");
         _escapeMenuCanvas.SetActive(true);
+        GameManager.TriggerOnPause();
     }
 
     public void OnResume() {
         Time.timeScale = 1.0f;
         _playerInput.SwitchCurrentActionMap("Gameplay");
         DefaultGameplayUI();
+        GameManager.TriggerOnResume();
     }
 
     public void OnStart() {

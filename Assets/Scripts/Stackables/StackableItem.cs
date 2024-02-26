@@ -1,28 +1,25 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(Renderer))]
-public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodable, IPooledObject
+public abstract class StackableItem : FallingItem, IRunServiceable, IExplodable
 {
     [SerializeField] private float _fadeSpeed = 1.0f;
     public PoolId PrefabPoolId;
     [HideInInspector] public Tray tray = null;
-    private bool _hasCollided = false;
     // This is necessary because getting bounds during motion is inaccurate
     [HideInInspector] public float Height = 0;
     protected Renderer _renderer = null;
     private Rigidbody _rigidbody = null;
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         Height = GetComponent<Collider>().bounds.size.y;
         _renderer = GetComponent<Renderer>();
         _rigidbody = GetComponent<Rigidbody>();
     }
 
 
-    private void OnCollisionEnter(Collision collision) {
-        if (_hasCollided) {
-            return;
-        }
-        _hasCollided = true;
+    protected override void OnFirstCollision(Collision collision) {
+        base.OnFirstCollision(collision);
         if (collision.gameObject.tag == "StackTop") {
             GameManager.TriggerOnAddToStack(this);
         }
@@ -52,10 +49,10 @@ public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodabl
         _rigidbody.AddForce(explosionForce, ForceMode.Impulse);
     }
 
-    public virtual void OnObjectSpawn() {
+    public override void OnObjectSpawn() {
+        base.OnObjectSpawn();
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
         _renderer.material.SetFloat("_Opacity", 1);
-        _hasCollided = false;
     }
 }

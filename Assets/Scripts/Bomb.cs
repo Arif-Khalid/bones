@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Bomb : MonoBehaviour, IRunServiceable, IPooledObject
+public class Bomb : FallingItem, IRunServiceable
 {
     [SerializeField] private LayerMask _explodingObjects;
     [SerializeField] private float _explosionRadius = 5.0f;
@@ -16,7 +16,8 @@ public class Bomb : MonoBehaviour, IRunServiceable, IPooledObject
     private float _currentColorChangeTime = 0;
 
     private Renderer _renderer;
-    private void Awake() {
+    protected override void Awake() {
+        base.Awake();
         _renderer = GetComponent<Renderer>();
     }
 
@@ -53,7 +54,8 @@ public class Bomb : MonoBehaviour, IRunServiceable, IPooledObject
         gameObject.SetActive(false);
     }
 
-    public void OnObjectSpawn() {
+    public override void OnObjectSpawn() {
+        base.OnObjectSpawn();
         _currentTimeForColorChange = _timeForColorChange;
         _currentExplodeTime = 0;
         _currentColorChangeTime = 0;
