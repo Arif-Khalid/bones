@@ -86,4 +86,8 @@ public class PlayerUI : MonoBehaviour
     public void OnVolumeChange() {
         AudioListener.volume = _volumeSlider.value / _volumeSlider.maxValue;
     }
+
+    public void PlayButtonSound() {
+        AudioManager.instance.Play(AudioID.Button);
+    }
 }

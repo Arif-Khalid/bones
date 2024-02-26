@@ -26,7 +26,7 @@ public class MainMenuManager : MonoBehaviour
     }
 
     // Works because I only have one other menu besides main menu
-    private void OnBack() {
+    public void OnBack() {
         ShowDefaultUI();
     }
 
@@ -37,5 +37,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnVolumeChange() {
         AudioListener.volume = _volumeSlider.value / _volumeSlider.maxValue;
+    }
+
+    public void PlayButtonSound() {
+        AudioManager.instance.Play(AudioID.Button);
     }
 }
