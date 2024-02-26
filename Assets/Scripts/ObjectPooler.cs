@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using static ObjectPooler;
 
 public enum PoolId
 {
     Pizza,
     Bomb,
     Explosion,
+    StackableItemUI,
 }
 
 public class ObjectPooler : MonoBehaviour
@@ -79,11 +79,13 @@ public class ObjectPooler : MonoBehaviour
             for(int i = 0; i < size; ++i) {
                 GameObject gameObject = queue.Dequeue();
                 gameObject.SetActive(false);
+                gameObject.transform.SetParent(null, false);
                 queue.Enqueue(gameObject);
             }
             HashSet<GameObject> removedObjects = _removedObjectsPools[poolId];
             foreach (GameObject removedObject in removedObjects) {
                 queue.Enqueue(removedObject);
+                removedObject.transform.SetParent(null, false);
                 removedObject.SetActive(false);
             }
         }

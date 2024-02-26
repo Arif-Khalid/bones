@@ -7,7 +7,9 @@ public class Tray : MonoBehaviour
     private StackableItem _currentStackTop = null;
     private List<StackableItem> _stackedItems = new List<StackableItem>();
     private bool _isStacked = true;
+    private PlayerUI _playerUI = null;
     private void Start() {
+        _playerUI = GetComponentInParent<PlayerUI>();
         GameManager.OnAddToStack += AddToStack;
         GameManager.OnStartGame += ResetStack;
     }
@@ -58,6 +60,7 @@ public class Tray : MonoBehaviour
         }
         _currentStackTop.tag = "Untagged";
         _currentStackTop = null;
+        _playerUI.PopulateDeathCanvas(_stackedItems);
         GameManager.TriggerOnEndGame();
     }
 

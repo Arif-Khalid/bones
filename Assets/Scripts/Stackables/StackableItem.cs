@@ -48,6 +48,7 @@ public abstract class StackableItem : MonoBehaviour, IRunServiceable, IExplodabl
         if (tray != null) {
             tray.RagdollStack(); // Adds rigidbody to entire stack
         }
+        _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.AddForce(explosionForce, ForceMode.Impulse);
     }
 
