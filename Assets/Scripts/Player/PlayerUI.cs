@@ -13,12 +13,14 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private RectTransform _scrollViewContent = null;
     [SerializeField] private PoolId _stackabeItemUIId;
     [SerializeField] private StackableItemScriptableObject _stackableItemScriptableObject = null;
+    [SerializeField] private Slider _volumeSlider = null;
 
     private PlayerInput _playerInput = null;
     private void Start() {
         _generalUICanvas.SetActive(true);
         _escapeMenuCanvas.SetActive(false);
         _deathCanvas.SetActive(false);
+        _volumeSlider.value = AudioListener.volume * _volumeSlider.maxValue;
         GameManager.OnEndGame += OnDeath;
     }
 
@@ -79,5 +81,9 @@ public class PlayerUI : MonoBehaviour
 
     public void OnQuit() {
         Application.Quit();
+    }
+
+    public void OnVolumeChange() {
+        AudioListener.volume = _volumeSlider.value / _volumeSlider.maxValue;
     }
 }
