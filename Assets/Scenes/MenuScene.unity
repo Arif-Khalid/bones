@@ -1952,6 +1952,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3214578406341843026, guid: 25dec901838f8cd4f86db32abeeb8678,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214578406341843026, guid: 25dec901838f8cd4f86db32abeeb8678,
+        type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1959,6 +1964,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3934223674722107935, guid: 25dec901838f8cd4f86db32abeeb8678,
+        type: 3}
+      propertyPath: m_text
+      value: Cloudy with a Chance of Pizza
+      objectReference: {fileID: 0}
+    - target: {fileID: 3934223674722107935, guid: 25dec901838f8cd4f86db32abeeb8678,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3934223674722107935, guid: 25dec901838f8cd4f86db32abeeb8678,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4563974107952642631, guid: 25dec901838f8cd4f86db32abeeb8678,
         type: 3}
@@ -1974,6 +1994,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ChildForceExpandHeight
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5212928023804468824, guid: 25dec901838f8cd4f86db32abeeb8678,
+        type: 3}
+      propertyPath: m_Padding.m_Top
+      value: 150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
