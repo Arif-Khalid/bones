@@ -1,19 +1,22 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider), typeof(Renderer))]
+/**
+ * Responsible for handling logic of a stackable item
+ */
+[RequireComponent(typeof(Collider))]
 public abstract class StackableItem : FallingItem, IRunServiceable, IExplodable
 {
-    [SerializeField] private float _fadeSpeed = 1.0f;
-    public PoolId PrefabPoolId;
-    [HideInInspector] public Tray tray = null;
-    // This is necessary because getting bounds during motion is inaccurate
-    [HideInInspector] public float Height = 0;
-    protected Renderer _renderer = null;
+    public PoolId PrefabPoolId;                                 // The pool ID of this stackable item
+    [SerializeField] private float _fadeSpeed = 1.0f;           // How fast the item fades upon hitting the ground
+    [HideInInspector] public Tray tray = null;                  // Reference to the tray this item is stacked on
+
+    [HideInInspector] public float Height = 0;                  // height of this item, necessary as getting height while item is falling is inaccurate
+    protected Renderer[] _renderers = null;                     // The renderers that make up this item. All renderers should have _Opacity attribute
     private Rigidbody _rigidbody = null;
     protected override void Awake() {
         base.Awake();
         Height = GetComponent<Collider>().bounds.size.y;
-        _renderer = GetComponent<Renderer>();
+        _renderers = GetComponentsInChildren<Renderer>();
         _rigidbody = GetComponent<Rigidbody>();
     }
 
@@ -28,17 +31,20 @@ public abstract class StackableItem : FallingItem, IRunServiceable, IExplodable
         }
     }
 
+    // Fade the item, handled by run service
     public virtual bool Run() {
-        float currentOpacity = _renderer.material.GetFloat("_Opacity");
+        float currentOpacity = _renderers[0].material.GetFloat("_Opacity");
         float newOpacity = currentOpacity - _fadeSpeed * Time.deltaTime;
-        if (newOpacity > 0) {
-            _renderer.material.SetFloat("_Opacity", newOpacity);
-            return false;
+        foreach (Renderer renderer in _renderers) {
+            if (newOpacity > 0) {
+                renderer.material.SetFloat("_Opacity", newOpacity);
+            }
         }
-        else {
+        if (newOpacity <= 0) {
             gameObject.SetActive(false);
             return true;
         }
+        return false;
     }
 
     public virtual void OnExplode(Vector3 explosionForce) {
@@ -53,6 +59,8 @@ public abstract class StackableItem : FallingItem, IRunServiceable, IExplodable
         base.OnObjectSpawn();
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
-        _renderer.material.SetFloat("_Opacity", 1);
+        foreach (Renderer renderer in _renderers) {
+            renderer.material.SetFloat("_Opacity", 1);
+        }
     }
 }

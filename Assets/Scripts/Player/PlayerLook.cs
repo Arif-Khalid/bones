@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/**
+ * Responsible for handling player camera rotation through mouse movement
+ */
 public class PlayerLook : MonoBehaviour
 {
     [SerializeField] private float _maxAbsoluteXRotation = 60.0f;
@@ -21,7 +24,6 @@ public class PlayerLook : MonoBehaviour
         _isLookEnabled = false;
     }
 
-
     private void Update()
     {
         if(!_isLookEnabled) {
@@ -34,5 +36,10 @@ public class PlayerLook : MonoBehaviour
 
         transform.Rotate(mouseDelta.x * Time.deltaTime * Vector3.up);
         Camera.main.transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
+    }
+
+    private void OnDestroy() {
+        GameManager.OnStartGame -= EnableLook;
+        GameManager.OnEndGame -= DisableLook;
     }
 }

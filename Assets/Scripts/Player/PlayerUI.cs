@@ -1,19 +1,25 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+/**
+ * Responsible for handling player UI logic
+ */
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerUI : MonoBehaviour
 {
-    [SerializeField] private GameObject _generalUICanvas = null;
-    [SerializeField] private GameObject _escapeMenuCanvas = null;
-    [SerializeField] private GameObject _deathCanvas = null;
-    [SerializeField] private RectTransform _scrollViewContent = null;
-    [SerializeField] private PoolId _stackabeItemUIId;
-    [SerializeField] private StackableItemScriptableObject _stackableItemScriptableObject = null;
+    [SerializeField] private GameObject _generalUICanvas = null;                                    // Where general other UI is
+    [SerializeField] private GameObject _escapeMenuCanvas = null;                                   // What is shown when game is paused
     [SerializeField] private Slider _volumeSlider = null;
+
+    // Death canvas
+    [SerializeField] private GameObject _deathCanvas = null;                                        // What is shown when player is dead
+    [SerializeField] private RectTransform _scrollViewContent = null;                               // The content of the scroll view located on the death canvas
+    [SerializeField] private PoolId _stackabeItemUIId;                                              // Pool id of stackable item UI 
+    [SerializeField] private StackableItemScriptableObject _stackableItemScriptableObject = null;   // Scriptable object linking Pool ID of stackable item to its
+                                                                                                    // UI display properties
 
     private PlayerInput _playerInput = null;
     private void Start() {
@@ -29,6 +35,8 @@ public class PlayerUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    // Functions called by Player Input component
+    #region Player input
     private void OnPause() {
         Time.timeScale = 0.0f;
         Cursor.lockState = CursorLockMode.None;
@@ -48,6 +56,7 @@ public class PlayerUI : MonoBehaviour
         GameManager.TriggerOnStartGame();
         DefaultGameplayUI();
     }
+    #endregion
 
     private void DefaultGameplayUI() {
         _playerInput.SwitchCurrentActionMap("Gameplay");
@@ -66,11 +75,13 @@ public class PlayerUI : MonoBehaviour
     public void PopulateDeathCanvas(List<StackableItem> stackedItems) {
         // Make the correct number of UI in the scroll view content
         float contentHeight = 0f;
-        while(_scrollViewContent.transform.childCount < stackedItems.Count) {
+        while (_scrollViewContent.transform.childCount < stackedItems.Count) {
             GameObject stackableItemUI = ObjectPooler.instance.SpawnFromPool(_stackabeItemUIId, Vector3.zero, Quaternion.identity);
             stackableItemUI.transform.SetParent(_scrollViewContent.transform, false);
             contentHeight += stackableItemUI.GetComponent<RectTransform>().rect.height;
         }
+
+        // Correct the size of content
         _scrollViewContent.sizeDelta = new Vector2(_scrollViewContent.sizeDelta.x, contentHeight);
 
         // Populate the scroll view content UIs with the correct names and images
@@ -91,5 +102,9 @@ public class PlayerUI : MonoBehaviour
 
     public void PlayButtonSound() {
         AudioManager.instance.Play(AudioID.Button);
+    }
+
+    private void OnDestroy() {
+        GameManager.OnEndGame -= OnDeath;
     }
 }

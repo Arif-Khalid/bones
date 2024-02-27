@@ -1,7 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/**
+ * Responsible for handling player transform movement through character controller
+ */
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,14 +22,13 @@ public class PlayerMovement : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
     }
 
-    #region Reading inputs
+    // Called by player input component
     private void OnMove(InputValue value) {
         _moveVal2D = value.Get<Vector2>();
     }
-    #endregion
 
     private void ProcessInputs() {
-        if(!_characterController.isGrounded) {
+        if (!_characterController.isGrounded) {
             _playerYVelocity += Physics.gravity.y * Time.deltaTime;
         }
         else {

@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+/**
+ * Responsible for implementing default stackable item behaviour
+ */
 public class Pizza : StackableItem
 {
 }
