@@ -31,3 +31,9 @@ Watch out though as pizzas aren't the only things falling!
   * Custom dithering transparency shaders for pizza
 * Particle systems
   * Particle system used for bomb fuse and explosion
+# Assets used
+* [Dish&Tray by Yuji Nagata](https://assetstore.unity.com/packages/3d/props/interior/dish-tray-5333) for tray asset
+* [Props 3D by Sigmoid Button Assets](https://assetstore.unity.com/packages/3d/props/props-3d-221035) for bomb asset
+* [Party Pack by Robot Skeleton](https://assetstore.unity.com/packages/3d/props/interior/party-pack-196474#content) for pizza asset
+* [FREE Skybox Extended Shader by BOXOPHOBIC](https://assetstore.unity.com/packages/vfx/shaders/free-skybox-extended-shader-107400#content) for skybox cubemap
+* [Low Poly FPS Map Lite by JustCreate](https://assetstore.unity.com/packages/3d/environments/low-poly-fps-map-lite-258453) for floor and wall assets
